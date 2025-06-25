@@ -1,11 +1,10 @@
-// src/components/Chatbox.jsx
 import { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 export default function Chatbox({ onClose }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  const [gifState, setGifState] = useState("main"); // main | thinking | answering
+  const [gifState, setGifState] = useState("main");
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -38,10 +37,22 @@ export default function Chatbox({ onClose }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: input }),
       });
+
       const data = await res.json();
-      setMessages([...updatedMessages, { role: "assistant", content: data.reply }]);
-      setGifState("answering");
-      setTimeout(() => setGifState("main"), 5000);
+      setTimeout(() => {
+        setGifState("answering");
+        let i = 0;
+        const fullReply = data.reply;
+        const interval = setInterval(() => {
+          i++;
+          setMessages([...updatedMessages, { role: "assistant", content: fullReply.slice(0, i) }]);
+          if (i >= fullReply.length) {
+            clearInterval(interval);
+            setTimeout(() => setGifState("main"), 1000);
+          }
+        }, 10); // Typing speed (ms per char)
+      }, 1000); // Thinking delay (before answering starts)
+
     } catch {
       setMessages([...updatedMessages, { role: "assistant", content: "Error getting response." }]);
       setGifState("main");
@@ -51,8 +62,8 @@ export default function Chatbox({ onClose }) {
   return (
     <div className="fixed bottom-24 right-4 z-50">
       <div className="relative w-80 max-h-[70vh] bg-gradient-to-br from-pink-100 to-purple-100 rounded-xl shadow-xl flex flex-col border border-pink-300">
-        
-        {/* ✅ Floating GIF inside chatbox container */}
+
+        {/* Floating GIF */}
         <img
           src={`/GIFs/${gifState}.gif`}
           alt="chatbot"
@@ -60,32 +71,34 @@ export default function Chatbox({ onClose }) {
           style={{ animation: 'none' }}
         />
 
+        {/* Header */}
         <div className="flex items-center justify-between p-2 border-b border-gray-300">
-          <h2 className="font-semibold text-purple-700"> {'\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0'}Menhara-Chan 🥰</h2>
+          <h2 className="font-semibold text-purple-700">{'\u00A0'.repeat(10)}Yuki-Chan 🥰</h2>
           <button onClick={onClose} className="text-red-500">X</button>
         </div>
 
+        {/* Messages */}
         <div className="flex-1 overflow-y-auto p-3 space-y-2 text-sm">
           {messages.map((msg, i) => (
             <div
-                key={i}
-                className={`max-w-[80%] px-3 py-2 rounded-lg ${
+              key={i}
+              className={`max-w-[80%] px-3 py-2 rounded-lg ${
                 msg.role === "user"
-                    ? "ml-auto bg-blue-200 text-right text-blue-900"
-                    : "mr-auto bg-white text-left text-gray-800"
-                }`}
+                  ? "ml-auto bg-blue-200 text-right text-blue-900"
+                  : "mr-auto bg-white text-left text-gray-800"
+              }`}
             >
-                {msg.role === "assistant" ? (
+              {msg.role === "assistant" ? (
                 <ReactMarkdown>{msg.content}</ReactMarkdown>
-                ) : (
+              ) : (
                 msg.content
-                )}
+              )}
             </div>
-            ))}
-
+          ))}
           <div ref={messagesEndRef} />
         </div>
 
+        {/* Input */}
         <div className="flex border-t border-gray-300">
           <input
             value={input}

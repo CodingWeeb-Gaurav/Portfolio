@@ -17,7 +17,7 @@ def load_system_prompt() -> str:
     with open(prompt_path, "r", encoding="utf-8") as file:
         return file.read()
     
-INTRO_MESSAGE = """Hello! I'm Mehnara🤗, here to answer any questions you have about Gaurav's: \n
+INTRO_MESSAGE = """Hello! I'm Yuki🤗, here to answer any questions you have about Gaurav's: \n
 • Projects \n
 • Experience \n
 • Tech stack \n
