@@ -7,6 +7,8 @@ import LeftPage from './pages/LeftPage';
 import RightPage from './pages/RightPage';
 import './PageLayout.css';
 import Footer from './styles/Footer';
+import ChatbotLauncher from "./ChatbotLauncher";
+import Chatbox from './Chatbox'; 
 import React, { useState, useEffect, useCallback, useRef, useLayoutEffect } from 'react';
 
 
@@ -36,6 +38,7 @@ const PageLayout = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const scrollRef = useRef(null);
   const shouldScrollToTop = useRef(false);
+  const [showChatbox, setShowChatbox] = useState(false);
 
   const navigate = useCallback((direction) => {
   if (isTransitioning) return;
@@ -137,6 +140,8 @@ useEffect(() => {
 };
 
 
+
+
   return (
     <div className="page-wrapper">
       <Navigation onNavigate={navigate} />
@@ -152,6 +157,8 @@ useEffect(() => {
         <div className="page-content">
           <div className="page-content-scrollable"  ref={scrollRef} >{renderActivePage()}</div>
         </div>
+         <ChatbotLauncher onOpen={() => setShowChatbox(true)} />
+         {showChatbox && <Chatbox onClose={() => setShowChatbox(false)} />}  
       </div>
     </div>
   );
