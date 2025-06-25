@@ -1,26 +1,38 @@
-# routes/chatbot.py
-from fastapi import APIRouter, Request
+from fastapi import APIRouter
+from pydantic import BaseModel
 import httpx
 import os
 from dotenv import load_dotenv
-from pydantic import BaseModel
-
-class ChatRequest(BaseModel):
-    message: str
-
 
 load_dotenv()
 router = APIRouter()
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
+class ChatRequest(BaseModel):
+    message: str
+
 def load_system_prompt(filepath: str = "./system_prompt.txt") -> str:
     with open(filepath, "r", encoding="utf-8") as file:
         return file.read()
 
+INTRO_MESSAGE = """Hello! I'm Mini GKG 🤖—here to answer any questions you have about Gaurav's:
+• Projects
+• Experience
+• Tech stack
+• Timeline
+• Extracurricular work
+
+I can explain how each project was built step by step—because if that info was already in his resume, I'd be out of a job 😢."""
+
+# ✅ GET: returns the first message (useful for chat init)
+@router.get("/chatbot")
+async def get_chatbot_intro():
+    return {"reply": INTRO_MESSAGE}
+
+# ✅ POST: LLM response to user question
 @router.post("/chatbot")
-async def chatbot(request: Request):
-    data = await request.json()
-    user_question = data.get("message")
+async def chatbot(request: ChatRequest):
+    user_question = request.message
     system_prompt = load_system_prompt()
 
     try:
@@ -33,14 +45,7 @@ async def chatbot(request: Request):
             "model": "llama3-8b-8192",
             "messages": [
                 {"role": "system", "content": system_prompt},
-                {"role": "assistant", "content": """Hello! I'm Mini GKG 🤖—here to answer any questions you have about Gaurav's:
-• Projects
-• Experience
-• Tech stack
-• Timeline
-• Extracurricular work
-
-I can explain how each project was built step by step—because if that info was already in his resume, I'd be out of a job 😢."""},
+                {"role": "assistant", "content": INTRO_MESSAGE},
                 {"role": "user", "content": user_question}
             ]
         }
