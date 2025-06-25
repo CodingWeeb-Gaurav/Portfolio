@@ -11,10 +11,12 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 class ChatRequest(BaseModel):
     message: str
 
-def load_system_prompt(filepath: str = "./system_prompt.txt") -> str:
-    with open(filepath, "r", encoding="utf-8") as file:
+def load_system_prompt() -> str:
+    current_dir = os.path.dirname(__file__)
+    prompt_path = os.path.join(current_dir, "system_prompt.txt")
+    with open(prompt_path, "r", encoding="utf-8") as file:
         return file.read()
-
+    
 INTRO_MESSAGE = """Hello! I'm Mini GKG 🤖—here to answer any questions you have about Gaurav's:
 • Projects
 • Experience
