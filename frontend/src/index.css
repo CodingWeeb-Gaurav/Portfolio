@@ -1,0 +1,137 @@
+/* src/index.css (or similar path) */
+
+/* Tailwind CSS directives - MUST be at the top if you're using Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS Variables (Custom Properties) */
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+  
+  /* Custom Navy Palette */
+  --navy-900: hsl(225, 71%, 6%);
+  --navy-800: hsl(222, 47%, 11%);
+  --navy-700: hsl(222, 47%, 16%);
+  --navy-600: hsl(222, 47%, 25%);
+  --navy-500: hsl(222, 47%, 35%);
+  --cyber-400: hsl(187, 100%, 50%);
+  --cyber-500: hsl(187, 100%, 42%);
+  --cyber-600: hsl(187, 100%, 33%);
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+  --radius: 0.5rem;
+}
+
+/* Tailwind base layer for applying global styles */
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  /* Original body styles merged with Tailwind's @apply directives */
+  body {
+    margin: 0; /* Keep margin 0 to let Tailwind take over or your own setup */
+    
+    font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+}
+
+/* Your original CSS rules */
+canvas.canvas-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* Put this in index.css or any global stylesheet */
+div[role="toolbar"] {
+  display: none !important;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Custom Utilities for Navy Theme - Defined by Tailwind's @layer */
+@layer utilities {
+  .bg-navy-900 {
+    background-color: var(--navy-900);
+  }
+  
+  .bg-navy-800 {
+    background-color: var(--navy-800);
+  }
+  
+  .bg-navy-700 {
+    background-color: var(--navy-700);
+  }
+  
+  .bg-navy-600 {
+    background-color: var(--navy-600);
+  }
+  
+  .bg-navy-500 {
+    background-color: var(--navy-500);
+  }
+  
+  .bg-cyber-400 {
+    background-color: var(--cyber-400);
+  }
+  
+  .text-cyber-400 {
+    color: var(--cyber-400);
+  }
+  
+  .border-cyber-400 {
+    border-color: var(--cyber-400);
+  }
+}
