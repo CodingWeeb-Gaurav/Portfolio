@@ -1,26 +1,18 @@
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
+# routes/chatbot.py
+from fastapi import APIRouter, Request
 import httpx
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
+router = APIRouter()
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-
-app = FastAPI()
 
 def load_system_prompt(filepath: str = "./system_prompt.txt") -> str:
     with open(filepath, "r", encoding="utf-8") as file:
         return file.read()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Adjust this in production
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-@app.post("/chatbot")
+@router.post("/chatbot")
 async def chatbot(request: Request):
     data = await request.json()
     user_question = data.get("message")

@@ -7,7 +7,7 @@ from competitive_utils import get_leetcode_stats, get_codeforces_stats
 from competitive_utils import get_codechef_stats
 from fastapi import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-
+from routes.chatbot import router as chatbot_router
 
 # Create tables
 Base.metadata.create_all(bind=engine)
@@ -110,6 +110,9 @@ def delete_blog(blog_id: int, db: Session = Depends(get_db)):
         return deleted
     else:
         raise HTTPException(status_code=404, detail="Blog post not found.")
+    
+app.include_router(chatbot_router)
+
 
 
 
