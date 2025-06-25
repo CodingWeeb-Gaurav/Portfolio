@@ -3,6 +3,11 @@ from fastapi import APIRouter, Request
 import httpx
 import os
 from dotenv import load_dotenv
+from pydantic import BaseModel
+
+class ChatRequest(BaseModel):
+    message: str
+
 
 load_dotenv()
 router = APIRouter()
