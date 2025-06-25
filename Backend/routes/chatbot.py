@@ -56,9 +56,16 @@ async def chatbot(request: ChatRequest):
                 headers=headers,
                 json=payload
             )
-            result = response.json()
+            try:
+                result = response.json()
+                reply = result["choices"][0]["message"]["content"]
+            except Exception as parse_error:
+                return {"error": "Failed to parse Groq response", "detail": response.text}
+
             reply = result["choices"][0]["message"]["content"]
             return {"reply": reply}
 
     except Exception as e:
-        return {"error": str(e)}
+        import traceback
+        traceback_str = traceback.format_exc()
+        return {"error": str(e), "trace": traceback_str}
