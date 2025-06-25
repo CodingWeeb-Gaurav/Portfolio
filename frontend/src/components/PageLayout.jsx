@@ -157,8 +157,11 @@ useEffect(() => {
         <div className="page-content">
           <div className="page-content-scrollable"  ref={scrollRef} >{renderActivePage()}</div>
         </div>
-         <ChatbotLauncher onOpen={() => setShowChatbox(true)} />
-         {showChatbox && <Chatbox onClose={() => setShowChatbox(false)} />}  
+        {showChatbox ? (
+          <Chatbox onClose={() => setShowChatbox(false)} />
+        ) : (
+          <ChatbotLauncher onOpen={() => setShowChatbox(true)} />
+        )}
       </div>
     </div>
   );

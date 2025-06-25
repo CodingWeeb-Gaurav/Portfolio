@@ -17,14 +17,14 @@ def load_system_prompt() -> str:
     with open(prompt_path, "r", encoding="utf-8") as file:
         return file.read()
     
-INTRO_MESSAGE = """Hello! I'm Mini GKG 🤖—here to answer any questions you have about Gaurav's:
-• Projects
-• Experience
-• Tech stack
-• Timeline
-• Extracurricular work
+INTRO_MESSAGE = """Hello! I'm Mehnara🤗, here to answer any questions you have about Gaurav's: \n
+• Projects \n
+• Experience \n
+• Tech stack \n
+• Timeline \n
+• Extracurricular work \n
 
-I can explain how each project was built step by step—because if that info was already in his resume, I'd be out of a job 😢."""
+I can explain how each project was built step by step. Because if that info was already in his resume, I'd be out of a job 😢."""
 
 # ✅ GET: returns the first message (useful for chat init)
 @router.get("/chatbot")
