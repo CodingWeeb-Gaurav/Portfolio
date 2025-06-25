@@ -14,10 +14,10 @@ export default function BottomPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const API_BASE = process.env.REACT_APP_API_URL;
   // Removed: const githubURL = 'http://localhost:8000/github/summary';
-  const cfURL = 'http://localhost:8000/competitive/cf/Gaurav_KG';
-  const ccURL = 'http://localhost:8000/competitive/cc/klad_753';
-
+  const cfURL = `${API_BASE}/competitive/cf/Gaurav_KG`;
+  const ccURL = `${API_BASE}/competitive/cc/klad_753`;
 
   useEffect(() => {
     const fetchData = async () => {
