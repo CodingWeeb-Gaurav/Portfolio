@@ -8,10 +8,16 @@ from competitive_utils import get_codechef_stats
 from fastapi import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from routes.chatbot import router as chatbot_router
+import traceback
 
 # Create tables
 Base.metadata.create_all(bind=engine)
-
+try:
+    Base.metadata.create_all(bind=engine)
+    print("Database tables created successfully")
+except Exception as e:
+    print(f"Warning: Could not create database tables: {e}")
+    print(traceback.format_exc())
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
