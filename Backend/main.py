@@ -9,22 +9,46 @@ from fastapi import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from routes.chatbot import router as chatbot_router
 import traceback
+from fastapi.responses import JSONResponse
 
 # Create tables
-Base.metadata.create_all(bind=engine)
 try:
     Base.metadata.create_all(bind=engine)
     print("Database tables created successfully")
 except Exception as e:
     print(f"Warning: Could not create database tables: {e}")
     print(traceback.format_exc())
+
 app = FastAPI()
+
+# Handle CORS - IMPORTANT: Put this FIRST
+@app.middleware("http")
+async def custom_cors_middleware(request, call_next):
+    # Handle preflight requests
+    if request.method == "OPTIONS":
+        response = JSONResponse(
+            content={"message": "Preflight request successful"},
+            status_code=200
+        )
+    else:
+        response = await call_next(request)
+    
+    # Add CORS headers
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "*"
+    response.headers["Access-Control-Allow-Credentials"] = "true"
+    
+    return response
+
+# Also add standard CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # For now, use * to test
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 # Dependency
@@ -73,7 +97,6 @@ def update_project(project_id: int, project: schemas.ProjectCreate, db: Session 
 def delete_project(project_id: int, db: Session = Depends(get_db)):
     return crud.delete_project(db, project_id)
 
-
 # External API for GitHub summary
 @app.get("/github/summary")
 def github_summary():
@@ -118,11 +141,3 @@ def delete_blog(blog_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Blog post not found.")
     
 app.include_router(chatbot_router)
-
-
-
-
-
-
-
-
