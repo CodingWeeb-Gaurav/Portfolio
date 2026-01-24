@@ -24,7 +24,7 @@ const LoadingScreen = ({ onContinue }) => {
   const [loadingComplete, setLoadingComplete] = useState(false);
 
   useEffect(() => {
-    fetch('https://ipapi.co/json/')
+    fetch('http://localhost:8000/api/my-ip')
       .then(res => res.json())
       .then(data => {
         const code = data.country_code;

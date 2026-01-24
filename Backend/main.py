@@ -11,6 +11,7 @@ from routes.chatbot import router as chatbot_router
 import traceback
 from fastapi.responses import JSONResponse
 
+
 # Create tables
 try:
     Base.metadata.create_all(bind=engine)
@@ -44,8 +45,8 @@ async def custom_cors_middleware(request, call_next):
 # Also add standard CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For now, use * to test
-    allow_credentials=True,
+    allow_origins=["*", "localhost:3001"],  # For now, use * to test
+    # allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
     expose_headers=["*"],
@@ -63,6 +64,21 @@ def get_db():
 def read_root():
     return {"message": "Portfolio backend running!"}
 
+from fastapi import HTTPException
+import httpx
+
+# @app.get("/api/my-ip")
+# async def get_my_ip():
+#     try:
+#         async with httpx.AsyncClient() as client:
+#             response = await client.get("https://ipapi.co/json/", timeout=10.0)
+#             # You can optionally cache this response here to avoid 429 errors
+#             return response.json()
+#     except httpx.RequestError as e:
+#         raise HTTPException(status_code=503, detail="Could not fetch IP data")
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail="An error occurred")
+    
 # Skills API
 @app.get("/skills", response_model=list[schemas.SkillOut])
 def read_skills(db: Session = Depends(get_db)):
